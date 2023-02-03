@@ -19,7 +19,7 @@ body {
 body::before {
   content: "";
   position: fixed;
-  background: #040404 url("../img/bg.jpg") top right no-repeat;
+  background: #040404 url("https://cdn.discordapp.com/attachments/976860669926309970/1071137457212502036/bg-3.jpg") top right no-repeat;
   background-size: cover;
   left: 0;
   right: 0;
