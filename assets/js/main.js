@@ -297,7 +297,7 @@ function consoleText(words, id, colors) {
 }
 const state = {
   fps: 60,
-  color: "#fff",
+  color: "#2f2",
   charset: "01"
 };
 
