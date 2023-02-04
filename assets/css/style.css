@@ -14,18 +14,50 @@ body {
   color: #fff;
   position: relative;
   background: transparent;
+  overflow: transparent;
 }
 
 body::before {
   content: "";
   position: fixed;
-  background: #040404 url("https://cdn.discordapp.com/attachments/976860669926309970/1071137457212502036/bg-3.jpg") top right no-repeat;
+  background: #040404 top right no-repeat;
   background-size: cover;
   left: 0;
   right: 0;
   top: 0;
   height: 100vh;
   z-index: -1;
+}
+#canvas {
+  z-index: 1;
+  position: absolute;
+  overflow: hidden;
+  }
+
+.hidden {
+  opacity:0;
+}
+.console-container {
+  font-size: 40px;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  text-align: left;
+  height: 210px;
+  position: relative;
+  color: white;
+  display: inline-block;
+  margin-top: -90px; /* add margin */
+  max-width: 100%; /* add max-width */
+  }
+  
+.console-underscore {
+  display:inline-block;
+  position:relative;
+  top:-0.14em;
+  left:10px;
 }
 
 @media (min-width: 1024px) {
@@ -53,6 +85,7 @@ h6 {
   font-family: "Raleway", sans-serif;
 }
 
+
 /*--------------------------------------------------------------
 # Header
 --------------------------------------------------------------*/
@@ -63,7 +96,7 @@ h6 {
   display: flex;
   align-items: center;
   z-index: 997;
-  overflow-y: auto;
+  overflow-y: hidden; /* Add overflow-y: hidden */
 }
 
 #header * {
@@ -71,12 +104,14 @@ h6 {
 }
 
 #header h1 {
-  font-size: 48px;
-  margin: 0;
+  position: relative;
+  font-size: 50px;
   padding: 0;
   line-height: 1;
   font-weight: 700;
   font-family: "Poppins", sans-serif;
+  margin-top: 30px; /* Добавить отступ */
+  margin-bottom: -12.5%;
 }
 
 #header h1 a,
@@ -129,15 +164,24 @@ h6 {
 @media (max-width: 992px) {
   #header h1 {
     font-size: 36px;
+    margin-top: 30px;
+  }
+  .console-container {
+    height: 100px;
+    width: auto;
+    font-size: 35px;
   }
 
   #header h2 {
     font-size: 20px;
-    line-height: 30px;
+    line-height: 34px;
+    text-align: center;
+    margin-right: 20px;
+    width: auto;
   }
 
   #header .social-links {
-    margin-top: 15px;
+    margin-top: -15px;
   }
 
   #header .container {
@@ -183,6 +227,7 @@ h6 {
 
   #header.header-top h1 {
     font-size: 26px;
+    position: relative;
   }
 }
 
