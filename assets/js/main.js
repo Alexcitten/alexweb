@@ -244,9 +244,97 @@
     }
   });
 
-  /**
-   * Initiate Pure Counter 
-   */
-  new PureCounter();
+// function([string1, string2],target id,[color1,color2])    
+consoleText(['Alexcitten', 'Aleeexcitten', 'alexcitten', 'Programmer', 'Alex', 'AlexUwU :D', 'Alexcitttten', 'Developer', 'Smoothie Lover'], 'text');
 
+function consoleText(words, id, colors) {
+  if (colors === undefined) colors = ['#fff'];
+  var visible = true;
+  var con = document.getElementById('console');
+  var letterCount = 1;
+  var x = 1;
+  var waiting = false;
+  var target = document.getElementById(id)
+  target.setAttribute('style', 'color:' + colors[0])
+  window.setInterval(function() {
+
+    if (letterCount === 0 && waiting === false) {
+      waiting = true;
+      target.innerHTML = words[0].substring(0, letterCount)
+      window.setTimeout(function() {
+        var usedColor = colors.shift();
+        colors.push(usedColor);
+        var usedWord = words.shift();
+        words.push(usedWord);
+        x = 1;
+        target.setAttribute('style', 'color:' + colors[0])
+        letterCount += x;
+        waiting = false;
+      }, 1000)
+    } else if (letterCount === words[0].length + 1 && waiting === false) {
+      waiting = true;
+      window.setTimeout(function() {
+        x = -1;
+        letterCount += x;
+        waiting = false;
+      }, 1000)
+    } else if (waiting === false) {
+      target.innerHTML = words[0].substring(0, letterCount)
+      letterCount += x;
+    }
+  }, 120)
+  window.setInterval(function() {
+    if (visible === true) {
+      con.className = 'console-underscore hidden'
+      visible = false;
+
+    } else {
+      con.className = 'console-underscore'
+
+      visible = true;
+    }
+  }, 400)
+}
+const state = {
+  fps: 60,
+  color: "#fff",
+  charset: "01"
+};
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+let w, h, p;
+const resize = () => {
+  w = canvas.width = innerWidth;
+  h = canvas.height = innerHeight;
+
+  p = Array(Math.ceil(w / 10)).fill(0);
+};
+window.addEventListener("resize", resize);
+resize();
+
+const random = (items) => items[Math.floor(Math.random() * items.length)];
+
+const draw = () => {
+  ctx.fillStyle = "rgba(0,0,0,.05)";
+  ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = state.color;
+
+  for (let i = 0; i < p.length; i++) {
+    let v = p[i];
+    ctx.fillText(random(state.charset), i * 10, v);
+    p[i] = v >= h || v >= 10000 * Math.random() ? 0 : v + 10;
+  }
+};
+
+let interval = setInterval(draw, 1000 / state.fps);
+fpsCtrl.onFinishChange((fps) => {
+  console.log(fps);
+  if (interval) {
+    clearInterval(interval);
+  }
+  interval = setInterval(draw, 1000 / fps);
+});
 })()
+
