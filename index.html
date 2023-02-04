@@ -29,7 +29,6 @@
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
-
   <!-- =======================================================
   * Template Name: Personal - v4.10.0
   * Template URL: https://bootstrapmade.com/personal-free-resume-bootstrap-template/
@@ -39,12 +38,14 @@
 </head>
 
 <body>
-
+  <canvas id="canvas">
+  </canvas>
   <!-- ======= Header ======= -->
   <header id="header">
     <div class="container">
-
-      <h1>Alexcitten</h1>
+      <h1>
+        <div class='console-container'><span id='text'></span><div class='console-underscore' id='console'>&#95;</div></div>
+      </h1>
       <h2>I am a <span>passionate and committed talented</span> JavaScript developer and photographer from <span style="color:rgb(72, 72, 255)">Ukr</span><span style="color:rgb(255, 225, 0)">aine</span></h2>
       <nav id="navbar" class="navbar">
         <ul>
@@ -66,7 +67,7 @@
 
     </div>
   </header><!-- End Header -->
-
+  <!-- Canvas Element -->
   <!-- ======= About Section ======= -->
   <section id="about" class="about">
 
@@ -98,7 +99,7 @@
             <div class="col-lg-6">
               <ul>
                 <li><i class="bi bi-chevron-right"></i> <strong>Degree:</strong> <span>Intermediate</span></li>
-                <li><i class="bi bi-chevron-right"></i> <strong>Email:</strong> <span>alexcitten@proton.me</span></li>
+                <li><i class="bi bi-chevron-right"></i> <strong>Email:</strong> <span>email@example.com</span></li>
                 <li><i class="bi bi-chevron-right"></i> <strong>Orders:</strong> <span>Available</span></li>
               </ul>
             </div>
@@ -859,7 +860,7 @@
   </section><!-- End Portfolio Section -->
 
   <div class="credits">
-    Background image licensed by <a href="https://images.apple.com/legal/sla/docs/OSX108.pdf">Apple</a>, it's <a href="https://bootstrapmade.com/">not my</a> picture.
+    <a href="https://bootstrapmade.com/">by</a>
   </div>
 
   <!-- Vendor JS Files -->
@@ -873,7 +874,6 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
-
 </body>
 
 </html>
