@@ -1230,11 +1230,11 @@ section .container {
 }
 
 .gradient-text {
-  background: linear-gradient(to right, #19d26e, #54e1e3, #12ff7f, #80ffba, #54b37f);
+  background: linear-gradient(to right, #19d26e, #13f5ff, #12ffde, #80ffba, #39fff6);
   background-size: 500% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradient-animation 15s ease infinite;
+  animation: gradient-animation 10s ease infinite;
 }
 
 /*--------------------------------------------------------------
