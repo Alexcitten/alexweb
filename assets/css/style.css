@@ -85,7 +85,51 @@ h6 {
   font-family: "Raleway", sans-serif;
 }
 
+.card {
+  perspective: 1500px;
+}
 
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%;
+  transform-style: preserve-3d;
+  transition: transform 1s;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.card:hover .card-inner {
+  transform: rotateY(180deg) translateZ(10px);
+}
+
+.card-inner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+
+
+.img-front,
+.img-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.img-back {
+  transform: rotateY(180deg);
+}
 /*--------------------------------------------------------------
 # Header
 --------------------------------------------------------------*/
