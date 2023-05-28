@@ -1217,6 +1217,26 @@ section .container {
   }
 }
 
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.gradient-text {
+  background: linear-gradient(to right, #19d26e, #4bf298, #12ff7f, #80ffba, #54b37f);
+  background-size: 500% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-animation 15s ease infinite;
+}
+
 /*--------------------------------------------------------------
 # Credits
 --------------------------------------------------------------*/
