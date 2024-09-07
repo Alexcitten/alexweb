@@ -245,7 +245,7 @@
   });
 
 // function([string1, string2],target id,[color1,color2])    
-consoleText(['Alexcitten', 'Aleeexcitten', 'alexcitten', 'Programmer', 'Alex', 'AlexUwU :D', 'Alexcitttten', 'Developer', 'Smoothie Lover'], 'text');
+consoleText(['Alexcitten', 'Aleeexcitten', 'alexcitten', 'Cozy Coder', 'Alex', 'SmoothDev', 'Alexcitttten', 'Developer', 'Smoothie Lover', 'Effortless Code', 'LET ME CODE!', 'Mitski Enjoyer', 'Photographer'], 'text');
 
 function consoleText(words, id, colors) {
   if (colors === undefined) colors = ['#fff'];
@@ -306,9 +306,11 @@ const ctx = canvas.getContext("2d");
 
 let w, h, p;
 const resize = () => {
-  w = canvas.width = innerWidth;
-  h = canvas.height = innerHeight;
+  // Устанавливаем реальный размер холста в соответствии с размерами окна
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
 
+  // Обновляем массив для рисования
   p = Array(Math.ceil(w / 10)).fill(0);
 };
 window.addEventListener("resize", resize);
@@ -329,12 +331,25 @@ const draw = () => {
 };
 
 let interval = setInterval(draw, 1000 / state.fps);
-fpsCtrl.onFinishChange((fps) => {
-  console.log(fps);
-  if (interval) {
-    clearInterval(interval);
-  }
-  interval = setInterval(draw, 1000 / fps);
-});
 })()
 
+document.addEventListener('DOMContentLoaded', (event) => {
+  function updateTime() {
+    const options = {
+      timeZone: 'Europe/Helsinki',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    };
+    const now = new Date().toLocaleTimeString('en-US', options);
+    const timeElement = document.getElementById('currentTime');
+    
+    if (timeElement) {
+      timeElement.innerHTML = now;
+    } else {
+      console.error('Element with id "currentTime" not found');
+    }
+  }
+  setInterval(updateTime, 1000);
+  updateTime();
+});
