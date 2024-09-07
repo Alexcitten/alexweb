@@ -1312,3 +1312,26 @@ section .container {
 .credits a:hover {
   color: #fff;
 }
+
+
+.highlight-block {
+  background-color: rgba(24, 210, 110, 0.1); /* Легкий зеленоватый фон */
+  padding: 20px; /* Отступы вокруг текста */
+  border-radius: 10px; /* Скругленные углы */
+  font-size: 18px; /* Увеличенный шрифт для удобства чтения */
+  line-height: 1.6; /* Интерлиньяж для удобного чтения */
+  font-family: "Open Sans", sans-serif; /* Основной шрифт */
+  color: #eaeaea; /* Светлый текст для контраста */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Легкая тень для отделения текста */
+  max-width: 100%; /* Максимальная ширина */
+  margin-top: 30px; /* Отступ сверху */
+}
+
+.highlight-block p {
+  margin-bottom: 15px; /* Отступ между абзацами */
+}
+
+.highlight-block strong {
+  color: #18d26e; /* Цвет выделения для важных частей текста */
+  font-weight: 700; /* Жирное выделение */
+}
