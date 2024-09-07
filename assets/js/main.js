@@ -353,3 +353,28 @@ document.addEventListener('DOMContentLoaded', (event) => {
   setInterval(updateTime, 1000);
   updateTime();
 });
+
+   const scrollSpeed = 1.5;
+
+   let scrollPos = 0;
+   let scrollTarget = 0;
+   let isScrolling = false;
+   window.addEventListener('wheel', function(event) {
+     scrollTarget += event.deltaY * scrollSpeed;
+     scrollTarget = Math.max(0, Math.min(document.body.scrollHeight - window.innerHeight, scrollTarget));
+     if (!isScrolling) {
+       isScrolling = true;
+       requestAnimationFrame(smoothScroll);
+     }
+   });
+
+   function smoothScroll() {
+     scrollPos += (scrollTarget - scrollPos) * 0.1;
+
+     window.scrollTo(0, scrollPos);
+     if (Math.abs(scrollTarget - scrollPos) > 0.5) {
+       requestAnimationFrame(smoothScroll);
+     } else {
+       isScrolling = false;
+     }
+   }
