@@ -332,49 +332,79 @@ const draw = () => {
 
 let interval = setInterval(draw, 1000 / state.fps);
 })()
-
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', () => {
   function updateTime() {
-    const options = {
-      timeZone: 'Europe/Helsinki',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    };
-    const now = new Date().toLocaleTimeString('en-US', options);
-    const timeElement = document.getElementById('currentTime');
-    
-    if (timeElement) {
-      timeElement.innerHTML = now;
-    } else {
-      console.error('Element with id "currentTime" not found');
-    }
+      const options = {
+          timeZone: 'Europe/Helsinki',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+      };
+      const now = new Date().toLocaleTimeString('en-US', options);
+      const timeElement = document.getElementById('currentTime');
+
+      if (timeElement) {
+          timeElement.textContent = now;
+      } else {
+          console.error('Element with id "currentTime" not found');
+      }
   }
+
   setInterval(updateTime, 1000);
   updateTime();
+
+  const scrollSpeed = 1.5; 
+  const smoothingFactor = 0.1;
+
+  let scrollTarget = window.scrollY;
+  let isScrolling = false;
+
+  function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+  }
+
+  function handleScroll(event) {
+      scrollTarget += event.deltaY * scrollSpeed;
+      scrollTarget = clamp(
+          scrollTarget,
+          0,
+          document.body.scrollHeight - window.innerHeight
+      );
+
+      if (!isScrolling) {
+          isScrolling = true;
+          requestAnimationFrame(smoothScroll);
+      }
+  }
+
+  function smoothScroll() {
+      const currentScroll = window.scrollY;
+      const distance = scrollTarget - currentScroll;
+
+      if (Math.abs(distance) > 0.5) {
+          window.scrollTo(0, currentScroll + distance * smoothingFactor);
+          requestAnimationFrame(smoothScroll);
+      } else {
+          window.scrollTo(0, scrollTarget);
+          isScrolling = false;
+      }
+  }
+
+  let touchStartY = 0;
+  let touchEndY = 0;
+
+  function handleTouchStart(event) {
+      touchStartY = event.touches[0].clientY;
+  }
+
+  function handleTouchMove(event) {
+      touchEndY = event.touches[0].clientY;
+      const deltaY = touchStartY - touchEndY;
+      handleScroll({ deltaY });
+      touchStartY = touchEndY;
+  }
+
+  window.addEventListener('wheel', handleScroll, { passive: false });
+  window.addEventListener('touchstart', handleTouchStart, { passive: true });
+  window.addEventListener('touchmove', handleTouchMove, { passive: false });
 });
-
-   const scrollSpeed = 1.5;
-
-   let scrollPos = 0;
-   let scrollTarget = 0;
-   let isScrolling = false;
-   window.addEventListener('wheel', function(event) {
-     scrollTarget += event.deltaY * scrollSpeed;
-     scrollTarget = Math.max(0, Math.min(document.body.scrollHeight - window.innerHeight, scrollTarget));
-     if (!isScrolling) {
-       isScrolling = true;
-       requestAnimationFrame(smoothScroll);
-     }
-   });
-
-   function smoothScroll() {
-     scrollPos += (scrollTarget - scrollPos) * 0.1;
-
-     window.scrollTo(0, scrollPos);
-     if (Math.abs(scrollTarget - scrollPos) > 0.5) {
-       requestAnimationFrame(smoothScroll);
-     } else {
-       isScrolling = false;
-     }
-   }
