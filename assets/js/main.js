@@ -35,19 +35,19 @@
   }
 
   /**
-   * Scrolls to an element with smooth behavior
+   * Scrolls to an element with header offset
    */
   const scrollto = (el) => {
-    const element = select(el);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  };
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
 
   /**
    * Mobile nav toggle
    */
-on('click', '.mobile-nav-toggle', function(e) {
+  on('click', '.mobile-nav-toggle', function(e) {
     select('#navbar').classList.toggle('navbar-mobile')
     this.classList.toggle('bi-list')
     this.classList.toggle('bi-x')
@@ -137,20 +137,21 @@ on('click', '.mobile-nav-toggle', function(e) {
     }
   });
 
-
   /**
    * Skills animation
    */
-  let skillsContent = select('.skills-content');
-  if (skillsContent) {
+  let skilsContent = select('.skills-content');
+  if (skilsContent) {
     new Waypoint({
-      element: skillsContent,
+      element: skilsContent,
       offset: '80%',
-      handler: function() {
+      handler: function(direction) {
         let progress = select('.progress .progress-bar', true);
-        progress.forEach((el) => el.style.width = el.getAttribute('aria-valuenow') + '%');
+        progress.forEach((el) => {
+          el.style.width = el.getAttribute('aria-valuenow') + '%'
+        });
       }
-    });
+    })
   }
 
   /**
@@ -170,13 +171,20 @@ on('click', '.mobile-nav-toggle', function(e) {
       clickable: true
     },
     breakpoints: {
-      320: { slidesPerView: 1, spaceBetween: 20 },
-      1200: { slidesPerView: 3, spaceBetween: 20 }
+      320: {
+        slidesPerView: 1,
+        spaceBetween: 20
+      },
+
+      1200: {
+        slidesPerView: 3,
+        spaceBetween: 20
+      }
     }
   });
 
   /**
-   * Portfolio isotope and filter
+   * Porfolio isotope and filter
    */
   window.addEventListener('load', () => {
     let portfolioContainer = select('.portfolio-container');
@@ -187,25 +195,37 @@ on('click', '.mobile-nav-toggle', function(e) {
       });
 
       let portfolioFilters = select('#portfolio-flters li', true);
+
       on('click', '#portfolio-flters li', function(e) {
         e.preventDefault();
-        portfolioFilters.forEach((el) => el.classList.remove('filter-active'));
+        portfolioFilters.forEach(function(el) {
+          el.classList.remove('filter-active');
+        });
         this.classList.add('filter-active');
 
-        portfolioIsotope.arrange({ filter: this.getAttribute('data-filter') });
+        portfolioIsotope.arrange({
+          filter: this.getAttribute('data-filter')
+        });
       }, true);
     }
+
   });
 
   /**
-   * Initiate portfolio lightbox
+   * Initiate portfolio lightbox 
    */
-  GLightbox({ selector: '.portfolio-lightbox' });
+  const portfolioLightbox = GLightbox({
+    selector: '.portfolio-lightbox'
+  });
 
   /**
-   * Initiate portfolio details lightbox
+   * Initiate portfolio details lightbox 
    */
-  GLightbox({ selector: '.portfolio-details-lightbox', width: '90%', height: '90vh' });
+  const portfolioDetailsLightbox = GLightbox({
+    selector: '.portfolio-details-lightbox',
+    width: '90%',
+    height: '90vh'
+  });
 
   /**
    * Portfolio details slider
@@ -224,71 +244,167 @@ on('click', '.mobile-nav-toggle', function(e) {
     }
   });
 
-  /**
-   * Animated console text
-   */
-  consoleText(['Alexcitten', 'Aleeexcitten', 'alexcitten', 'Cozy Coder', 'Alex', 'SmoothDev', 'Alexcitttten', 'Developer', 'Smoothie Lover', 'Effortless Code', 'LET ME CODE!', 'Mitski Enjoyer', 'Photographer'], 'text');
+// function([string1, string2],target id,[color1,color2])    
+consoleText(['Alexcitten', 'Aleeexcitten', 'alexcitten', 'Cozy Coder', 'Alex', 'SmoothDev', 'Alexcitttten', 'Developer', 'Smoothie Lover', 'Effortless Code', 'LET ME CODE!', 'Mitski Enjoyer', 'Photographer'], 'text');
 
-  function consoleText(words, id, colors = ['#fff']) {
-    let visible = true;
-    let letterCount = 1;
-    let x = 1;
-    let waiting = false;
-    let target = document.getElementById(id);
-    target.style.color = colors[0];
+function consoleText(words, id, colors) {
+  if (colors === undefined) colors = ['#fff'];
+  var visible = true;
+  var con = document.getElementById('console');
+  var letterCount = 1;
+  var x = 1;
+  var waiting = false;
+  var target = document.getElementById(id)
+  target.setAttribute('style', 'color:' + colors[0])
+  window.setInterval(function() {
 
-    setInterval(() => {
-      if (!waiting) {
-        target.innerHTML = words[0].substring(0, letterCount);
+    if (letterCount === 0 && waiting === false) {
+      waiting = true;
+      target.innerHTML = words[0].substring(0, letterCount)
+      window.setTimeout(function() {
+        var usedColor = colors.shift();
+        colors.push(usedColor);
+        var usedWord = words.shift();
+        words.push(usedWord);
+        x = 1;
+        target.setAttribute('style', 'color:' + colors[0])
         letterCount += x;
-      }
-    }, 120);
-
-    setInterval(() => {
-      document.getElementById('console').classList.toggle('hidden');
-      visible = !visible;
-    }, 400);
-  }
-
-  /**
-   * Matrix effect
-   */
-  const state = { fps: 60, color: "#2f2", charset: "01" };
-  const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext("2d");
-
-  let w, h, p;
-  const resize = () => {
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = window.innerHeight;
-    p = Array(Math.ceil(w / 10)).fill(0);
-  };
-  window.addEventListener("resize", resize);
-  resize();
-
-  const random = (items) => items[Math.floor(Math.random() * items.length)];
-  const draw = () => {
-    ctx.fillStyle = "rgba(0,0,0,.05)";
-    ctx.fillRect(0, 0, w, h);
-    ctx.fillStyle = state.color;
-
-    for (let i = 0; i < p.length; i++) {
-      let v = p[i];
-      ctx.fillText(random(state.charset), i * 10, v);
-      p[i] = v >= h || v >= 10000 * Math.random() ? 0 : v + 10;
+        waiting = false;
+      }, 1000)
+    } else if (letterCount === words[0].length + 1 && waiting === false) {
+      waiting = true;
+      window.setTimeout(function() {
+        x = -1;
+        letterCount += x;
+        waiting = false;
+      }, 1000)
+    } else if (waiting === false) {
+      target.innerHTML = words[0].substring(0, letterCount)
+      letterCount += x;
     }
-  };
-  setInterval(draw, 1000 / state.fps);
-})();
+  }, 120)
+  window.setInterval(function() {
+    if (visible === true) {
+      con.className = 'console-underscore hidden'
+      visible = false;
 
+    } else {
+      con.className = 'console-underscore'
+
+      visible = true;
+    }
+  }, 400)
+}
+const state = {
+  fps: 60,
+  color: "#2f2",
+  charset: "01"
+};
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+let w, h, p;
+const resize = () => {
+  // Устанавливаем реальный размер холста в соответствии с размерами окна
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+
+  // Обновляем массив для рисования
+  p = Array(Math.ceil(w / 10)).fill(0);
+};
+window.addEventListener("resize", resize);
+resize();
+
+const random = (items) => items[Math.floor(Math.random() * items.length)];
+
+const draw = () => {
+  ctx.fillStyle = "rgba(0,0,0,.05)";
+  ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = state.color;
+
+  for (let i = 0; i < p.length; i++) {
+    let v = p[i];
+    ctx.fillText(random(state.charset), i * 10, v);
+    p[i] = v >= h || v >= 10000 * Math.random() ? 0 : v + 10;
+  }
+};
+
+let interval = setInterval(draw, 1000 / state.fps);
+})()
 document.addEventListener('DOMContentLoaded', () => {
   function updateTime() {
-    const options = { timeZone: 'Europe/Helsinki', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-    const now = new Date().toLocaleTimeString('en-US', options);
-    const timeElement = document.getElementById('currentTime');
+      const options = {
+          timeZone: 'Europe/Helsinki',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+      };
+      const now = new Date().toLocaleTimeString('en-US', options);
+      const timeElement = document.getElementById('currentTime');
 
-    if (timeElement) timeElement.innerHTML = now;
+      if (timeElement) {
+          timeElement.textContent = now;
+      } else {
+          console.error('Element with id "currentTime" not found');
+      }
   }
+
   setInterval(updateTime, 1000);
   updateTime();
+
+  const scrollSpeed = 1.5; 
+  const smoothingFactor = 0.1;
+
+  let scrollTarget = window.scrollY;
+  let isScrolling = false;
+
+  function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+  }
+
+  function handleScroll(event) {
+      scrollTarget += event.deltaY * scrollSpeed;
+      scrollTarget = clamp(
+          scrollTarget,
+          0,
+          document.body.scrollHeight - window.innerHeight
+      );
+
+      if (!isScrolling) {
+          isScrolling = true;
+          requestAnimationFrame(smoothScroll);
+      }
+  }
+
+  function smoothScroll() {
+      const currentScroll = window.scrollY;
+      const distance = scrollTarget - currentScroll;
+
+      if (Math.abs(distance) > 0.5) {
+          window.scrollTo(0, currentScroll + distance * smoothingFactor);
+          requestAnimationFrame(smoothScroll);
+      } else {
+          window.scrollTo(0, scrollTarget);
+          isScrolling = false;
+      }
+  }
+
+  let touchStartY = 0;
+  let touchEndY = 0;
+
+  function handleTouchStart(event) {
+      touchStartY = event.touches[0].clientY;
+  }
+
+  function handleTouchMove(event) {
+      touchEndY = event.touches[0].clientY;
+      const deltaY = touchStartY - touchEndY;
+      handleScroll({ deltaY });
+      touchStartY = touchEndY;
+  }
+
+  window.addEventListener('wheel', handleScroll, { passive: false });
+  window.addEventListener('touchstart', handleTouchStart, { passive: true });
+  window.addEventListener('touchmove', handleTouchMove, { passive: false });
 });
