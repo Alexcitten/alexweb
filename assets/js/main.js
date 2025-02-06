@@ -38,34 +38,45 @@
    * Scrolls to an element with header offset
    */
   const scrollto = (el) => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    })
-  }
+    const element = select(el);
+    if (element) {
+      const elementPos = element.offsetTop;
+      const header = select('#header');
+      const offset = header ? header.offsetHeight : 0;
+
+      window.scrollTo({
+        top: elementPos - offset,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   /**
    * Mobile nav toggle
    */
   on('click', '.mobile-nav-toggle', function(e) {
-    select('#navbar').classList.toggle('navbar-mobile')
-    this.classList.toggle('bi-list')
-    this.classList.toggle('bi-x')
-  })
+    const navbar = select('#navbar');
+    if (navbar) {
+      navbar.classList.toggle('navbar-mobile');
+      this.classList.toggle('bi-list');
+      this.classList.toggle('bi-x');
+    }
+  });
 
   /**
    * Scrool with ofset on links with a class name .scrollto
    */
   on('click', '#navbar .nav-link', function(e) {
-    let section = select(this.hash)
-    if (section) {
-      e.preventDefault()
+    if (this.hash) {
+      e.preventDefault();
+      const section = select(this.hash);
+      
+      if (section) {
 
       let navbar = select('#navbar')
       let header = select('#header')
       let sections = select('section', true)
       let navlinks = select('#navbar .nav-link', true)
-
       navlinks.forEach((item) => {
         item.classList.remove('active')
       })
@@ -104,8 +115,14 @@
       }
 
       scrollto(this.hash)
+if (history.pushState) {
+          history.pushState(null, null, this.hash);
+        } else {
+          window.location.hash = this.hash;
+        }
+      }
     }
-  }, true)
+  }, true);
 
   /**
    * Activate/show sections on load with hash links
