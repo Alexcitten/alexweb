@@ -35,19 +35,12 @@
   }
 
   /**
-   * Scrolls to an element with header offset
+   * Scrolls to an element with smooth behavior
    */
   const scrollto = (el) => {
     const element = select(el);
     if (element) {
-      const elementPos = element.offsetTop;
-      const header = select('#header');
-      const offset = header ? header.offsetHeight : 0;
-
-      window.scrollTo({
-        top: elementPos - offset,
-        behavior: 'smooth'
-      });
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
@@ -64,7 +57,7 @@
   });
 
   /**
-   * Scrool with ofset on links with a class name .scrollto
+   * Scroll with offset on links with .scrollto class
    */
   on('click', '#navbar .nav-link', function(e) {
     if (this.hash) {
@@ -72,50 +65,22 @@
       const section = select(this.hash);
       
       if (section) {
+        let navbar = select('#navbar');
+        let navlinks = select('#navbar .nav-link', true);
+        navlinks.forEach((item) => item.classList.remove('active'));
 
-      let navbar = select('#navbar')
-      let header = select('#header')
-      let sections = select('section', true)
-      let navlinks = select('#navbar .nav-link', true)
-      navlinks.forEach((item) => {
-        item.classList.remove('active')
-      })
+        this.classList.add('active');
 
-      this.classList.add('active')
+        if (navbar.classList.contains('navbar-mobile')) {
+          navbar.classList.remove('navbar-mobile');
+          let navbarToggle = select('.mobile-nav-toggle');
+          navbarToggle.classList.toggle('bi-list');
+          navbarToggle.classList.toggle('bi-x');
+        }
 
-      if (navbar.classList.contains('navbar-mobile')) {
-        navbar.classList.remove('navbar-mobile')
-        let navbarToggle = select('.mobile-nav-toggle')
-        navbarToggle.classList.toggle('bi-list')
-        navbarToggle.classList.toggle('bi-x')
-      }
+        scrollto(this.hash);
 
-      if (this.hash == '#header') {
-        header.classList.remove('header-top')
-        sections.forEach((item) => {
-          item.classList.remove('section-show')
-        })
-        return;
-      }
-
-      if (!header.classList.contains('header-top')) {
-        header.classList.add('header-top')
-        setTimeout(function() {
-          sections.forEach((item) => {
-            item.classList.remove('section-show')
-          })
-          section.classList.add('section-show')
-
-        }, 350);
-      } else {
-        sections.forEach((item) => {
-          item.classList.remove('section-show')
-        })
-        section.classList.add('section-show')
-      }
-
-      scrollto(this.hash)
-if (history.pushState) {
+        if (history.pushState) {
           history.pushState(null, null, this.hash);
         } else {
           window.location.hash = this.hash;
@@ -129,27 +94,15 @@ if (history.pushState) {
    */
   window.addEventListener('load', () => {
     if (window.location.hash) {
-      let initial_nav = select(window.location.hash)
+      let initial_nav = select(window.location.hash);
 
       if (initial_nav) {
-        let header = select('#header')
-        let navlinks = select('#navbar .nav-link', true)
-
-        header.classList.add('header-top')
-
+        let navlinks = select('#navbar .nav-link', true);
         navlinks.forEach((item) => {
-          if (item.getAttribute('href') == window.location.hash) {
-            item.classList.add('active')
-          } else {
-            item.classList.remove('active')
-          }
-        })
+          item.classList.toggle('active', item.getAttribute('href') === window.location.hash);
+        });
 
-        setTimeout(function() {
-          initial_nav.classList.add('section-show')
-        }, 350);
-
-        scrollto(window.location.hash)
+        scrollto(window.location.hash);
       }
     }
   });
@@ -157,18 +110,16 @@ if (history.pushState) {
   /**
    * Skills animation
    */
-  let skilsContent = select('.skills-content');
-  if (skilsContent) {
+  let skillsContent = select('.skills-content');
+  if (skillsContent) {
     new Waypoint({
-      element: skilsContent,
+      element: skillsContent,
       offset: '80%',
-      handler: function(direction) {
+      handler: function() {
         let progress = select('.progress .progress-bar', true);
-        progress.forEach((el) => {
-          el.style.width = el.getAttribute('aria-valuenow') + '%'
-        });
+        progress.forEach((el) => el.style.width = el.getAttribute('aria-valuenow') + '%');
       }
-    })
+    });
   }
 
   /**
@@ -188,20 +139,13 @@ if (history.pushState) {
       clickable: true
     },
     breakpoints: {
-      320: {
-        slidesPerView: 1,
-        spaceBetween: 20
-      },
-
-      1200: {
-        slidesPerView: 3,
-        spaceBetween: 20
-      }
+      320: { slidesPerView: 1, spaceBetween: 20 },
+      1200: { slidesPerView: 3, spaceBetween: 20 }
     }
   });
 
   /**
-   * Porfolio isotope and filter
+   * Portfolio isotope and filter
    */
   window.addEventListener('load', () => {
     let portfolioContainer = select('.portfolio-container');
@@ -212,37 +156,25 @@ if (history.pushState) {
       });
 
       let portfolioFilters = select('#portfolio-flters li', true);
-
       on('click', '#portfolio-flters li', function(e) {
         e.preventDefault();
-        portfolioFilters.forEach(function(el) {
-          el.classList.remove('filter-active');
-        });
+        portfolioFilters.forEach((el) => el.classList.remove('filter-active'));
         this.classList.add('filter-active');
 
-        portfolioIsotope.arrange({
-          filter: this.getAttribute('data-filter')
-        });
+        portfolioIsotope.arrange({ filter: this.getAttribute('data-filter') });
       }, true);
     }
-
   });
 
   /**
-   * Initiate portfolio lightbox 
+   * Initiate portfolio lightbox
    */
-  const portfolioLightbox = GLightbox({
-    selector: '.portfolio-lightbox'
-  });
+  GLightbox({ selector: '.portfolio-lightbox' });
 
   /**
-   * Initiate portfolio details lightbox 
+   * Initiate portfolio details lightbox
    */
-  const portfolioDetailsLightbox = GLightbox({
-    selector: '.portfolio-details-lightbox',
-    width: '90%',
-    height: '90vh'
-  });
+  GLightbox({ selector: '.portfolio-details-lightbox', width: '90%', height: '90vh' });
 
   /**
    * Portfolio details slider
@@ -261,111 +193,70 @@ if (history.pushState) {
     }
   });
 
-// function([string1, string2],target id,[color1,color2])    
-consoleText(['Alexcitten', 'Aleeexcitten', 'alexcitten', 'Cozy Coder', 'Alex', 'SmoothDev', 'Alexcitttten', 'Developer', 'Smoothie Lover', 'Effortless Code', 'LET ME CODE!', 'Mitski Enjoyer', 'Photographer'], 'text');
+  /**
+   * Animated console text
+   */
+  consoleText(['Alexcitten', 'Aleeexcitten', 'alexcitten', 'Cozy Coder', 'Alex', 'SmoothDev', 'Alexcitttten', 'Developer', 'Smoothie Lover', 'Effortless Code', 'LET ME CODE!', 'Mitski Enjoyer', 'Photographer'], 'text');
 
-function consoleText(words, id, colors) {
-  if (colors === undefined) colors = ['#fff'];
-  var visible = true;
-  var con = document.getElementById('console');
-  var letterCount = 1;
-  var x = 1;
-  var waiting = false;
-  var target = document.getElementById(id)
-  target.setAttribute('style', 'color:' + colors[0])
-  window.setInterval(function() {
+  function consoleText(words, id, colors = ['#fff']) {
+    let visible = true;
+    let letterCount = 1;
+    let x = 1;
+    let waiting = false;
+    let target = document.getElementById(id);
+    target.style.color = colors[0];
 
-    if (letterCount === 0 && waiting === false) {
-      waiting = true;
-      target.innerHTML = words[0].substring(0, letterCount)
-      window.setTimeout(function() {
-        var usedColor = colors.shift();
-        colors.push(usedColor);
-        var usedWord = words.shift();
-        words.push(usedWord);
-        x = 1;
-        target.setAttribute('style', 'color:' + colors[0])
+    setInterval(() => {
+      if (!waiting) {
+        target.innerHTML = words[0].substring(0, letterCount);
         letterCount += x;
-        waiting = false;
-      }, 1000)
-    } else if (letterCount === words[0].length + 1 && waiting === false) {
-      waiting = true;
-      window.setTimeout(function() {
-        x = -1;
-        letterCount += x;
-        waiting = false;
-      }, 1000)
-    } else if (waiting === false) {
-      target.innerHTML = words[0].substring(0, letterCount)
-      letterCount += x;
-    }
-  }, 120)
-  window.setInterval(function() {
-    if (visible === true) {
-      con.className = 'console-underscore hidden'
-      visible = false;
+      }
+    }, 120);
 
-    } else {
-      con.className = 'console-underscore'
-
-      visible = true;
-    }
-  }, 400)
-}
-const state = {
-  fps: 60,
-  color: "#2f2",
-  charset: "01"
-};
-
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-
-let w, h, p;
-const resize = () => {
-  // Устанавливаем реальный размер холста в соответствии с размерами окна
-  w = canvas.width = window.innerWidth;
-  h = canvas.height = window.innerHeight;
-
-  // Обновляем массив для рисования
-  p = Array(Math.ceil(w / 10)).fill(0);
-};
-window.addEventListener("resize", resize);
-resize();
-
-const random = (items) => items[Math.floor(Math.random() * items.length)];
-
-const draw = () => {
-  ctx.fillStyle = "rgba(0,0,0,.05)";
-  ctx.fillRect(0, 0, w, h);
-  ctx.fillStyle = state.color;
-
-  for (let i = 0; i < p.length; i++) {
-    let v = p[i];
-    ctx.fillText(random(state.charset), i * 10, v);
-    p[i] = v >= h || v >= 10000 * Math.random() ? 0 : v + 10;
+    setInterval(() => {
+      document.getElementById('console').classList.toggle('hidden');
+      visible = !visible;
+    }, 400);
   }
-};
 
-let interval = setInterval(draw, 1000 / state.fps);
-})()
+  /**
+   * Matrix effect
+   */
+  const state = { fps: 60, color: "#2f2", charset: "01" };
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
 
-document.addEventListener('DOMContentLoaded', (event) => {
+  let w, h, p;
+  const resize = () => {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+    p = Array(Math.ceil(w / 10)).fill(0);
+  };
+  window.addEventListener("resize", resize);
+  resize();
+
+  const random = (items) => items[Math.floor(Math.random() * items.length)];
+  const draw = () => {
+    ctx.fillStyle = "rgba(0,0,0,.05)";
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = state.color;
+
+    for (let i = 0; i < p.length; i++) {
+      let v = p[i];
+      ctx.fillText(random(state.charset), i * 10, v);
+      p[i] = v >= h || v >= 10000 * Math.random() ? 0 : v + 10;
+    }
+  };
+  setInterval(draw, 1000 / state.fps);
+})();
+
+document.addEventListener('DOMContentLoaded', () => {
   function updateTime() {
-    const options = {
-      timeZone: 'Europe/Helsinki',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    };
+    const options = { timeZone: 'Europe/Helsinki', hour: '2-digit', minute: '2-digit', second: '2-digit' };
     const now = new Date().toLocaleTimeString('en-US', options);
     const timeElement = document.getElementById('currentTime');
-    
-    if (timeElement) {
-      timeElement.innerHTML = now;
-    } else {
-      console.error('Element with id "currentTime" not found');
-    }
+
+    if (timeElement) timeElement.innerHTML = now;
   }
   setInterval(updateTime, 1000);
   updateTime();
