@@ -14,7 +14,7 @@ body {
   color: #fff;
   position: relative;
   background: transparent;
-  overflow: hidden;
+  overflow: auto !important;
 }
 
 body::before {
